@@ -1,0 +1,241 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scheduling App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #ffe4e6;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #ff99aa;
+            padding: 1em;
+            text-align: center;
+            color: white;
+            font-size: 1.5em;
+        }
+
+        .container {
+            padding: 1em;
+        }
+
+        .card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin: 1em 0;
+            padding: 1em;
+        }
+
+        .card h3 {
+            margin: 0 0 0.5em;
+            color: #ff5577;
+        }
+
+        button {
+            background-color: #ff5577;
+            color: white;
+            border: none;
+            padding: 0.5em 1em;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+        }
+
+        button:hover {
+            background-color: #ff7788;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 0.5em;
+            margin: 0.5em 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1em 0;
+        }
+
+        table th, table td {
+            border: 1px solid #ccc;
+            padding: 0.5em;
+            text-align: left;
+        }
+
+        table th {
+            background-color: #ff99aa;
+            color: white;
+        }
+
+        .schedule-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1em;
+        }
+
+        .time-slot {
+            border: 1px solid #ccc;
+            padding: 0.5em;
+            border-radius: 5px;
+            background: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        Body Scrub Scheduling App
+    </header>
+
+    <div class="container">
+        <!-- Employee Availability Form -->
+        <div class="card">
+            <h3>Set Employee Availability</h3>
+            <form id="availability-form">
+                <label for="employee-name">Employee Name:</label>
+                <input type="text" id="employee-name" placeholder="Enter employee name" required>
+
+                <label for="days-available">Days Available:</label>
+                <select id="days-available" multiple required>
+                    <option value="Monday">Monday</option>
+                    <option value="Tuesday">Tuesday</option>
+                    <option value="Wednesday">Wednesday</option>
+                    <option value="Thursday">Thursday</option>
+                    <option value="Friday">Friday</option>
+                    <option value="Saturday">Saturday</option>
+                    <option value="Sunday">Sunday</option>
+                </select>
+
+                <button type="submit">Save Availability</button>
+            </form>
+        </div>
+
+        <!-- Service Management -->
+        <div class="card">
+            <h3>Manage Services</h3>
+            <form id="service-form">
+                <label for="service-name">Service Name:</label>
+                <input type="text" id="service-name" placeholder="Enter service name" required>
+
+                <label for="service-price">Service Price:</label>
+                <input type="number" id="service-price" placeholder="Enter price" required>
+
+                <button type="submit">Add Service</button>
+            </form>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Service Name</th>
+                        <th>Price</th>
+                    </tr>
+                </thead>
+                <tbody id="service-list">
+                    <!-- Services will be listed here -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Client Management -->
+        <div class="card">
+            <h3>Add Client Details</h3>
+            <form id="client-form">
+                <label for="client-name">Client Name:</label>
+                <input type="text" id="client-name" placeholder="Enter client name" required>
+
+                <label for="locker-number">Locker Number:</label>
+                <input type="text" id="locker-number" placeholder="Enter locker number" required>
+
+                <label for="client-notes">Notes:</label>
+                <textarea id="client-notes" placeholder="Enter any additional notes"></textarea>
+
+                <button type="submit">Add Client</button>
+            </form>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Client Name</th>
+                        <th>Locker Number</th>
+                        <th>Notes</th>
+                    </tr>
+                </thead>
+                <tbody id="client-list">
+                    <!-- Clients will be listed here -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Daily Schedule View -->
+        <div class="card">
+            <h3>Daily Schedule</h3>
+            <form id="schedule-date-form">
+                <label for="schedule-date">Select Date:</label>
+                <input type="date" id="schedule-date" required>
+                <button type="submit">View Schedule</button>
+            </form>
+            <div id="schedule-grid" class="schedule-grid">
+                <!-- Time slots will be dynamically created here -->
+            </div>
+            <button id="save-schedule">Save Day Schedule</button>
+        </div>
+
+    </div>
+
+    <script>
+        const employees = [];
+        const clients = [];
+        let schedule = {}; // Stores appointments for each day
+
+        document.getElementById('schedule-date-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const date = document.getElementById('schedule-date').value;
+            if (!date) return alert('Please select a date.');
+
+            // Generate time slots (15-minute intervals)
+            const scheduleGrid = document.getElementById('schedule-grid');
+            scheduleGrid.innerHTML = '';
+
+            for (let hour = 9; hour < 17; hour++) { // From 9:00 to 17:00
+                for (let minutes = 0; minutes < 60; minutes += 15) {
+                    const time = `${hour.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+                    const slot = document.createElement('div');
+                    slot.className = 'time-slot';
+                    slot.textContent = `${time} - Available`;
+                    scheduleGrid.appendChild(slot);
+                }
+            }
+        });
+
+        document.getElementById('save-schedule').addEventListener('click', function () {
+            const date = document.getElementById('schedule-date').value;
+            if (!date) return alert('Please select a date to save the schedule.');
+
+            const slots = Array.from(document.querySelectorAll('.time-slot')).map(slot => slot.textContent);
+            schedule[date] = slots;
+
+            // Save to file (for simplicity, a JSON file)
+            const blob = new Blob([JSON.stringify(schedule, null, 2)], { type: 'application/json' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `schedule_${date}.json`;
+            link.click();
+
+            alert(`Schedule for ${date} has been saved.`);
+        });
+
+    </script>
+</body>
+</html>
