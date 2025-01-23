@@ -1,0 +1,245 @@
+{\rtf1\fbidis\ansi\ansicpg1252\deff0\nouicompat\deflang1033{\fonttbl{\f0\fnil Segoe UI;}}
+{\colortbl ;\red0\green0\blue0;}
+{\*\generator Riched20 10.0.19041}\viewkind4\uc1 
+\pard\tx720\cf1\f0\fs38 <!DOCTYPE html>\par
+<html lang="en">\par
+<head>\par
+    <meta charset="UTF-8">\par
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">\par
+    <title>Scheduling App</title>\par
+    <style>\par
+        body \{\par
+            font-family: Arial, sans-serif;\par
+            background-color: #ffe4e6;\par
+            color: #333;\par
+            margin: 0;\par
+            padding: 0;\par
+        \}\par
+\par
+        header \{\par
+            background-color: #ff99aa;\par
+            padding: 1em;\par
+            text-align: center;\par
+            color: white;\par
+            font-size: 1.5em;\par
+        \}\par
+\par
+        .container \{\par
+            padding: 1em;\par
+        \}\par
+\par
+        .card \{\par
+            background: white;\par
+            border-radius: 10px;\par
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);\par
+            margin: 1em 0;\par
+            padding: 1em;\par
+        \}\par
+\par
+        .card h3 \{\par
+            margin: 0 0 0.5em;\par
+            color: #ff5577;\par
+        \}\par
+\par
+        button \{\par
+            background-color: #ff5577;\par
+            color: white;\par
+            border: none;\par
+            padding: 0.5em 1em;\par
+            border-radius: 5px;\par
+            cursor: pointer;\par
+            font-size: 1em;\par
+        \}\par
+\par
+        button:hover \{\par
+            background-color: #ff7788;\par
+        \}\par
+\par
+        input, select, textarea \{\par
+            width: 100%;\par
+            padding: 0.5em;\par
+            margin: 0.5em 0;\par
+            border: 1px solid #ccc;\par
+            border-radius: 5px;\par
+        \}\par
+\par
+        table \{\par
+            width: 100%;\par
+            border-collapse: collapse;\par
+            margin: 1em 0;\par
+        \}\par
+\par
+        table th, table td \{\par
+            border: 1px solid #ccc;\par
+            padding: 0.5em;\par
+            text-align: left;\par
+        \}\par
+\par
+        table th \{\par
+            background-color: #ff99aa;\par
+            color: white;\par
+        \}\par
+\par
+        .schedule-grid \{\par
+            display: grid;\par
+            grid-template-columns: repeat(4, 1fr);\par
+            gap: 1em;\par
+        \}\par
+\par
+        .time-slot \{\par
+            border: 1px solid #ccc;\par
+            padding: 0.5em;\par
+            border-radius: 5px;\par
+            background: #fff;\par
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);\par
+        \}\par
+    </style>\par
+</head>\par
+<body>\par
+    <header>\par
+        Body Scrub Scheduling App\par
+    </header>\par
+\par
+    <div class="container">\par
+        <!-- Employee Availability Form -->\par
+        <div class="card">\par
+            <h3>Set Employee Availability</h3>\par
+            <form id="availability-form">\par
+                <label for="employee-name">Employee Name:</label>\par
+                <input type="text" id="employee-name" placeholder="Enter employee name" required>\par
+\par
+                <label for="days-available">Days Available:</label>\par
+                <select id="days-available" multiple required>\par
+                    <option value="Monday">Monday</option>\par
+                    <option value="Tuesday">Tuesday</option>\par
+                    <option value="Wednesday">Wednesday</option>\par
+                    <option value="Thursday">Thursday</option>\par
+                    <option value="Friday">Friday</option>\par
+                    <option value="Saturday">Saturday</option>\par
+                    <option value="Sunday">Sunday</option>\par
+                </select>\par
+\par
+                <button type="submit">Save Availability</button>\par
+            </form>\par
+        </div>\par
+\par
+        <!-- Service Management -->\par
+        <div class="card">\par
+            <h3>Manage Services</h3>\par
+            <form id="service-form">\par
+                <label for="service-name">Service Name:</label>\par
+                <input type="text" id="service-name" placeholder="Enter service name" required>\par
+\par
+                <label for="service-price">Service Price:</label>\par
+                <input type="number" id="service-price" placeholder="Enter price" required>\par
+\par
+                <button type="submit">Add Service</button>\par
+            </form>\par
+\par
+            <table>\par
+                <thead>\par
+                    <tr>\par
+                        <th>Service Name</th>\par
+                        <th>Price</th>\par
+                    </tr>\par
+                </thead>\par
+                <tbody id="service-list">\par
+                    <!-- Services will be listed here -->\par
+                </tbody>\par
+            </table>\par
+        </div>\par
+\par
+        <!-- Client Management -->\par
+        <div class="card">\par
+            <h3>Add Client Details</h3>\par
+            <form id="client-form">\par
+                <label for="client-name">Client Name:</label>\par
+                <input type="text" id="client-name" placeholder="Enter client name" required>\par
+\par
+                <label for="locker-number">Locker Number:</label>\par
+                <input type="text" id="locker-number" placeholder="Enter locker number" required>\par
+\par
+                <label for="client-notes">Notes:</label>\par
+                <textarea id="client-notes" placeholder="Enter any additional notes"></textarea>\par
+\par
+                <button type="submit">Add Client</button>\par
+            </form>\par
+\par
+            <table>\par
+                <thead>\par
+                    <tr>\par
+                        <th>Client Name</th>\par
+                        <th>Locker Number</th>\par
+                        <th>Notes</th>\par
+                    </tr>\par
+                </thead>\par
+                <tbody id="client-list">\par
+                    <!-- Clients will be listed here -->\par
+                </tbody>\par
+            </table>\par
+        </div>\par
+\par
+        <!-- Daily Schedule View -->\par
+        <div class="card">\par
+            <h3>Daily Schedule</h3>\par
+            <form id="schedule-date-form">\par
+                <label for="schedule-date">Select Date:</label>\par
+                <input type="date" id="schedule-date" required>\par
+                <button type="submit">View Schedule</button>\par
+            </form>\par
+            <div id="schedule-grid" class="schedule-grid">\par
+                <!-- Time slots will be dynamically created here -->\par
+            </div>\par
+            <button id="save-schedule">Save Day Schedule</button>\par
+        </div>\par
+\par
+    </div>\par
+\par
+    <script>\par
+        const employees = [];\par
+        const clients = [];\par
+        let schedule = \{\}; // Stores appointments for each day\par
+\par
+        document.getElementById('schedule-date-form').addEventListener('submit', function (e) \{\par
+            e.preventDefault();\par
+\par
+            const date = document.getElementById('schedule-date').value;\par
+            if (!date) return alert('Please select a date.');\par
+\par
+            // Generate time slots (15-minute intervals)\par
+            const scheduleGrid = document.getElementById('schedule-grid');\par
+            scheduleGrid.innerHTML = '';\par
+\par
+            for (let hour = 9; hour < 17; hour++) \{ // From 9:00 to 17:00\par
+                for (let minutes = 0; minutes < 60; minutes += 15) \{\par
+                    const time = `$\{hour.toString().padStart(2, '0')\}:$\{minutes.toString().padStart(2, '0')\}`;\par
+                    const slot = document.createElement('div');\par
+                    slot.className = 'time-slot';\par
+                    slot.textContent = `$\{time\} - Available`;\par
+                    scheduleGrid.appendChild(slot);\par
+                \}\par
+            \}\par
+        \});\par
+\par
+        document.getElementById('save-schedule').addEventListener('click', function () \{\par
+            const date = document.getElementById('schedule-date').value;\par
+            if (!date) return alert('Please select a date to save the schedule.');\par
+\par
+            const slots = Array.from(document.querySelectorAll('.time-slot')).map(slot => slot.textContent);\par
+            schedule[date] = slots;\par
+\par
+            // Save to file (for simplicity, a JSON file)\par
+            const blob = new Blob([JSON.stringify(schedule, null, 2)], \{ type: 'application/json' \});\par
+            const link = document.createElement('a');\par
+            link.href = URL.createObjectURL(blob);\par
+            link.download = `schedule_$\{date\}.json`;\par
+            link.click();\par
+\par
+            alert(`Schedule for $\{date\} has been saved.`);\par
+        \});\par
+\par
+    </script>\par
+</body>\par
+</html>\par
+}
+ 
